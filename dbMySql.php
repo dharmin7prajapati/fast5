@@ -22,6 +22,21 @@ class DB_con
 		mysql_select_db(DB_NAME, $conn);
 	}
 	
+	public function error($msg)
+	{
+		echo '<div style="border:2px solid black;font-family:tahoma;font-size:16px;padding:20px;text-align:center;color:yellow;background-color:#CC0000;">'.htmlspecialchars($msg).'</div>';
+		
+		$msg = date("c")."\n".$this->query."\n\n".mysql_error($this->link_id)."\n\n";
+
+		if (defined("DEVMODE"))
+		{
+			echo '<div style="border:2px solid black;font-family:tahoma;font-size:16px;padding:20px;color:yellow;background-color:#CC0000;">'.nl2br($msg).'</div>';
+		}
+	
+		die();	
+
+	}
+	
 	public function assign($field, $value)
 	{
 		$this->fields[$field] = ($value)==""?("'".$value."'"):$value;
@@ -36,6 +51,11 @@ class DB_con
 	public function escape($str)
 	{
 		return mysql_real_escape_string($str);
+	}
+	
+	public function reset()
+	{
+		$this->fields = array();
 	}
 	
 	public function insert($table)
@@ -53,8 +73,9 @@ class DB_con
 		}
 		
 		$sql = "INSERT INTO ".$table." (".$f.") VALUES (".$v.")";
+		//echo $sql;die;
 		$this->query($sql);
-		return $this->insertId();
+		return mysql_insert_id();		
 	}
 	
 	public function select()
@@ -78,12 +99,11 @@ class DB_con
 
 		$this->query = $_query;
 
-		$this->result = @mysql_query($_query, $this->link_id)
-
-			or $this->error("Can not execute database query. Please contact site administrator. ".(defined("DEV_MODE")&&DEV_MODE?"<br/>".htmlspecialchars($_query):""));
+		$this->result = @mysql_query($_query) or die(mysql_error());
 
 		return $this->result; 
 	}
+	
 	public function insertId()
 
 	{

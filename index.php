@@ -26,13 +26,20 @@ function edit_id(id)
 		window.location='edit_data.php?edit_id='+id
 	}
 }
+function add()
+{
+	if(confirm('Sure you want to add new record ?'))
+	{
+		window.location='add_data.php'
+	}
+}
 </script>
 </head>
 <body>
 <center>
 <div id="header">
 	<div id="content">
-    <label>PHP Data Update and Delete Using OOP - By Cleartuts</label>
+    <label>PHP Data Update and Delete Using OOP - By Dynamic Dreamz</label>
     </div>
 </div>
 <div id="body">
@@ -42,7 +49,7 @@ function edit_id(id)
     <th>First Name</th>
     <th>Last Name</th>
     <th>City</th>
-    <th colspan="2">edit/delete</th>
+    <th colspan="3">edit/delete</th>
     </tr>
     <?php
 	while($row=mysql_fetch_row($res))
@@ -52,6 +59,7 @@ function edit_id(id)
             <td><?php echo $row[1]; ?></td>
             <td><?php echo $row[2]; ?></td>
             <td><?php echo $row[3]; ?></td>
+            <td align="center"><a href="javascript:add()"><img src="b_add.png" alt="ADD" /></a></td>
             <td align="center"><a href="javascript:edit_id(<?php echo $row[0]; ?>)"><img src="b_edit.png" alt="EDIT" /></a></td>
             <td align="center"><a href="javascript:del_id(<?php echo $row[0]; ?>)"><img src="b_drop.png" alt="DELETE" /></a></td>
             </tr>
